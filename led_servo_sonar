@@ -1,0 +1,66 @@
+#define echoPin 11
+#define trigPin 10
+#define negLED 4
+#define posLED 5
+
+#include <Servo.h>
+#define servoPin = 12;
+Servo servo;
+
+float duration;
+float distance;
+
+void setup() {
+  Serial.begin(9600);
+  //Defining input/output pins - LED pins are output because no data is beign collected
+  pinMode(echoPin, INPUT);
+  pinMode(trigPin, OUTPUT);
+  pinMode(negLED, OUTPUT);
+  pinMode(posLED, OUTPUT);
+  servo.attach(12);
+}
+
+void loop() {
+
+  servo.write(0);
+  
+
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+
+  digitalWrite(trigPin, LOW);
+
+//resetting LED pins both to LOW so that indicator works properly
+  digitalWrite(negLED, LOW);
+  digitalWrite(posLED, LOW);
+
+
+
+
+  Serial.print(distance);
+  Serial.print(" cm, ");
+    //below is distance in inches
+  Serial.print(distance / 2.54);
+  Serial.print(" in");
+  Serial.println();
+
+  delay(500);
+  servo.write(180);
+  delay(500);
+}
+
+void a () {
+  duration = pulseIn(echoPin, HIGH);
+
+  if (distance < 20) {
+    digitalWrite(posLED, HIGH);
+  } else {
+    digitalWrite(posLED, LOW);
+  }
+}
+//100 ohm resistor being used between LED and jumper cable to arduino
+//Sensor is HC-SR04
+//Arduino Uno R3
